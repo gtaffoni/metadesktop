@@ -4,6 +4,11 @@ Web based  Meta Desktop for containerasing GUI applications based on KasmVNC
 
 https://github.com/kasmtech/KasmVNC
 
+and
+
+https://github.com/sarusso/MetaDesktop
+
+
 The container has been designed to run on singularity and docker.
 
 The desktop enviroment is ubuntu:18.04 lxde
