@@ -14,9 +14,17 @@ if [ 'XXX'$1 = 'XXX' ]; then
 else
     COMMAND=$1
 fi
+
+export BASE_PORT=
+export SINGULARITY_VNC_AUTH=True
+export SINGULARITY_NOHTTPS=true
+export SINGULARITYENV_BASE_PORT=$BASE_PORT
+export SINGULARITYENV_AUTH_PASS=testpass
+export SINGULARITYENV_AUTH_USER:=testpass
+
 HOMEDIR=`mktemp -d -t singularity_XXXXXXX`
 mkdir $HOMEDIR/tmp
 mkdir $HOMEDIR/home
-singularity run  --pid --no-home --home=/home/skauser --workdir ${HOMEDIR}/tmp -B${HOMEDIR}:/home/ -B/beegfs:/beegfs --containall --cleanenv docker://${CONTAINER_NAME}:${CONTAINER_VERSION} $COMMAND
+singularity run  --pid --no-home --home=/home/metauser --workdir ${HOMEDIR}/tmp -B${HOMEDIR}:/home/ -B/beegfs:/beegfs --containall --cleanenv docker://${CONTAINER_NAME}:${CONTAINER_VERSION} $COMMAND
 rm -fr ${HOMEDIR}
 

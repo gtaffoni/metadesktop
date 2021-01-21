@@ -31,16 +31,16 @@ else
     #   Setup home
     #---------------------
 
-    if [ ! -f "/home/skauser/.initialized" ]; then
+    if [ ! -f "/home/metauser/.initialized" ]; then
         echo "[INFO] Setting up home"
-	[ ! -d "/home/skauser" ] &&  mkdir -p /home/skauser
+	[ ! -d "/home/metauser" ] &&  mkdir -p /home/metauser
         # Copy over vanilla home contents
-        for x in /skauser_home_vanilla/* /skauser_home_vanilla/.[!.]* /skauser_home_vanilla/..?*; do
-            if [ -e "$x" ]; then cp -a "$x" /home/skauser/; fi
+        for x in /metauser_home_vanilla/* /metauser_home_vanilla/.[!.]* /metauser_home_vanilla/..?*; do
+            if [ -e "$x" ]; then cp -a "$x" /home/metauser/; fi
         done
         
         # Mark as initialized
-	[ ! -f "/home/skauser/.initialized" ] && touch /home/skauser/.initialized
+	[ ! -f "/home/metauser/.initialized" ] && touch /home/metauser/.initialized
     fi
     
 
@@ -61,34 +61,40 @@ else
           echo "export $env_var" >> /tmp/env.sh
       fi
     done
-    cd /home/skauser 
+    cd /home/metauser 
     #---------------------
     #   VNC Password
     #---------------------
     if [ "x$GUI" == "xTrue" ]; then
 	    if [ "x$AUTH_PASS" != "x" ]; then
 	        echo "[INFO] Setting up VNC password..."
-	        /usr/local/bin/kasmvncpasswd -f <<< $AUTH_PASS > /home/skauser/.kasmpasswd
-	        chmod 600 /home/skauser/.kasmpasswd
-	        export VNC_AUTH=True
+	        /usr/local/bin/kasmvncpasswd -f <<< $AUTH_PASS > /home/metauser/.kasmpasswd
 	    else
-	        echo "[INFO] Not setting up any VNC password"
-	            
-	    fi
+	        echo "[INFO] Setting up default VNC password: metapasswd"
+                /usr/local/bin/kasmvncpasswd -f <<< metapasswd > /home/metauser/.kasmpasswd
+	    fi            
+            chmod 600 /home/metauser/.kasmpasswd
+            export VNC_AUTH=True
+	    if [ "x$AUTH_USER" != "x" ]; then
+               echo "[INFO] Setting up VNC user..."
+               sed -i -e "s/username=metauser/username=$AUTH_USER/" /home/metauser/.vnc/config 
+	    else
+               echo "[INFO] Default VNC user: metauser"
+            fi
     fi
     
-	echo "[INFO] Creating /tmp/skauserhome to be used as skauser home"
-	mkdir /tmp/skauserhome
+	echo "[INFO] Creating /tmp/metauserhome to be used as metauser home"
+	mkdir /tmp/metauserhome
 	
-	echo "[INFO] Initializing /tmp/skauserhome with configuration files"
-	cp -aT /skauser_home_vanilla /tmp/skauserhome
+	echo "[INFO] Initializing /tmp/metauserhome with configuration files"
+	cp -aT /metauser_home_vanilla /tmp/metauserhome
 	
-	echo "[INFO] Moving to /home/skauser and setting as home"
-	cd /home/skauser
-	export HOME=/home/skauser
+	echo "[INFO] Moving to /home/metauser and setting as home"
+	cd /home/metauser
+	export HOME=/home/metauser
 	
 	echo "[INFO] Setting new prompt @$CONTAINER_NAME container"
-	echo 'export PS1="${debian_chroot:+($debian_chroot)}\u@$CONTAINER_NAME@\h:\w\$ "' >> /tmp/skauserhome/.bashrc
+	echo 'export PS1="${debian_chroot:+($debian_chroot)}\u@$CONTAINER_NAME@\h:\w\$ "' >> /tmp/metauserhome/.bashrc
         
 	
     # Set entrypoint command
@@ -113,7 +119,7 @@ else
 	echo ""
 	echo "=============================================================="
 	echo ""
-	echo "You are now in /home/skauser with write access as user \"$(whoami)\"."
+	echo "You are now in /home/metauser with write access as user \"$(whoami)\"."
 	echo ""
 	echo "Remember that contents inside this container, unless stored"
 	echo "on a persistent volume mounted from you host machine, will"
