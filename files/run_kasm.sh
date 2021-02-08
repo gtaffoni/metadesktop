@@ -8,6 +8,11 @@ if [ "x$BASE_PORT" == "x" ]; then
 else
     DESKTOP_NUMBER=$(($BASE_PORT-5900+1))
 fi
+
+if [ "x$KASMSOCK" == "xTrue" ]; then
+    export SOCKET_PORT=$(( $RANDOM % 50 + 1 ))
+fi
+
 if [ "x$VNC_AUTH" == "xTrue" ]; then
      echo "[INFO] Setting new certificate for VNC"
      openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /home/metauser/.vnc/self.pem -out /home/metauser/.vnc/self.pem -subj "/C=IT/ST=None/L=None/O=INAF/OU=OATs/CN=kasm/emailAddress=none@none.none" 

@@ -111,7 +111,6 @@ else
 
     # Start!
 	echo -n "[INFO] Will execute entrypoint command: "
-	echo $COMMAND
 	echo ""
 	echo "=============================================================="
 	echo ""

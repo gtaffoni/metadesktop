@@ -56,8 +56,9 @@ RUN mv /home/metauser /metauser_home_vanilla
 # to copy over the /home/matauser_vanilla into /home/metauser (for Singularity)
 RUN chmod 777 /home
 
-# donwload and install kasmvnc
-RUN wget -qO- https://github.com/kasmtech/KasmVNC/releases/download/v0.9.1-beta/KasmVNC_0.9.1-beta_Ubuntu_18.04.tar.gz | sudo tar xz --strip 1 -C /
+# Copy and install kasmvnc
+COPY files/kasmvnc-Linux-x86_64-0.9.tar.gz /tmp
+RUN sudo tar xz --strip 1 -C / -f /tmp/kasmvnc-Linux-x86_64-0.9.tar.gz && rm /tmp/kasmvnc-Linux-x86_64-0.9.tar.gz
 RUN mkdir /usr/local/share/kasmvnc/certs
 RUN chown metauser:metagroup /usr/local/share/kasmvnc/certs
 COPY files/index.html /usr/local/share/kasmvnc/www/
