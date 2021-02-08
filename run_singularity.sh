@@ -19,8 +19,8 @@ export BASE_PORT=
 export SINGULARITY_VNC_AUTH=True
 export SINGULARITY_NOHTTPS=true
 export SINGULARITYENV_BASE_PORT=$BASE_PORT
+export SINGULARITYENV_AUTH_USER=testuser
 export SINGULARITYENV_AUTH_PASS=testpass
-export SINGULARITYENV_AUTH_USER:=testpass
 
 HOMEDIR=`mktemp -d -t singularity_XXXXXXX`
 mkdir $HOMEDIR/tmp
